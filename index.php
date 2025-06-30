@@ -3,13 +3,13 @@ require_once 'config/database.php';
 $database = new Database();
 $db = $database->getConnection();
 
-// Obtener productos destacados
+// Obtiene productos destacados
 $query = "SELECT * FROM productos WHERE disponible = 1 ORDER BY fecha_creacion DESC LIMIT 6";
 $stmt = $db->prepare($query);
 $stmt->execute();
 $productos_destacados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Procesar formulario de consulta
+// Procesa formulario de consulta
 $consulta_success = '';
 $consulta_error = '';
 
@@ -26,12 +26,12 @@ if ($_POST && isset($_POST['action']) && $_POST['action'] === 'consulta') {
         $consulta_error = 'Por favor ingrese un email válido';
     } else {
         try {
-            // Guardar consulta en base de datos
+            // Guarda consulta en base de datos
             $query = "INSERT INTO consultas (nombre, email, telefono, asunto, mensaje, fecha_consulta) VALUES (?, ?, ?, ?, ?, NOW())";
             $stmt = $db->prepare($query);
             $stmt->execute([$nombre, $email, $telefono, $asunto, $mensaje]);
             
-            // Simular envío de email
+            // Simular envío de email(Provisionalmente no funciona, ya que xampp bloquea el envio de mails)
             // $resultado_email = enviarEmailConsulta($email, $nombre, $asunto);
 
             if ($resultado_email['success']) {
